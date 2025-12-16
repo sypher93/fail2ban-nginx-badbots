@@ -2,6 +2,7 @@
 
 ## Description
 Advanced fail2ban filter for Nginx that protects against common web attacks including OWASP Top 10 vulnerabilities, path traversal, code injection, SQL injection, XSS, malicious bots, and Django-specific exploits.
+This filter is the one I use for deploying my Django applications on the internet, so it has been battle-tested and works quite well, which is why I'm sharing it.
 
 ## Features
 - **OWASP Top 10 Protection**: SQL injection, XSS, path traversal, RCE
@@ -15,7 +16,7 @@ Advanced fail2ban filter for Nginx that protects against common web attacks incl
 
 ### 1. Create the filter
 ```bash
-sudo nano /etc/fail2ban/filter.d/nginx-badbots.conf
+sudo nano /etc/fail2ban/filter.d/nginx-badbots-filter.conf
 ```
 
 Paste the filter configuration (see below).
@@ -35,7 +36,7 @@ sudo fail2ban-client status nginx-badbots
 
 ## Filter Configuration
 
-**File**: `/etc/fail2ban/filter.d/nginx-badbots.conf`
+**File**: `/etc/fail2ban/filter.d/nginx-badbots-filer.conf`
 
 ```ini
 [Definition]
@@ -132,7 +133,7 @@ ignoreregex =
 [nginx-badbots]
 enabled = true
 port = http,https
-filter = nginx-badbots
+filter = nginx-badbots-filter
 logpath = /var/log/nginx/access.log
 maxretry = 2
 findtime = 600
@@ -154,7 +155,7 @@ ignoreip = 127.0.0.1/8 ::1 YOUR_IP_HERE
 
 ```bash
 # Test the filter against your logs
-sudo fail2ban-regex /var/log/nginx/access.log /etc/fail2ban/filter.d/nginx-badbots.conf
+sudo fail2ban-regex /var/log/nginx/access.log /etc/fail2ban/filter.d/nginx-badbots-filter.conf
 
 # Check banned IPs
 sudo fail2ban-client status nginx-badbots
